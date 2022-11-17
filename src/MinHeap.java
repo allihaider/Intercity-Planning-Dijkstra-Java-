@@ -1,10 +1,18 @@
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class MinHeap {
     int k;
+    ArrayList<double[]> heapElements = new ArrayList<>();
 
     public MinHeap(){
         this.k = 2;
     }
 
+    public void add(int key, double value){
+        heapElements.add(new double[]{key, value});
+        heapifyUp(heapElements.size() - 1);
+    }
     public int getParentIndex(int Index){
         if ((Index % k)== 0){
             return (int)((Index / k) - 1);
@@ -14,4 +22,29 @@ public class MinHeap {
         }
     }
 
+    public void heapifyUp(int Index){
+        if(Index == 0){
+            return;
+        }
+
+        if(heapElements.get(Index)[1] > heapElements.get(getParentIndex(Index))[1]){
+            return;
+        }
+
+        else if(heapElements.get(Index)[1] == heapElements.get(getParentIndex(Index))[1]){
+            if(heapElements.get(Index)[0] > heapElements.get(getParentIndex(Index))[0]){
+                return;
+            }
+
+            else{
+                Collections.swap(heapElements, Index, getParentIndex(Index));
+                heapifyUp(getParentIndex(Index));
+            }
+        }
+
+        else{
+            Collections.swap(heapElements, Index, getParentIndex(Index));
+            heapifyUp(getParentIndex(Index));
+        }
+    }
 }
