@@ -71,4 +71,54 @@ public class MinHeap {
 
         return heapElementKeys;
     }
+
+    public double[] extractMin(){
+        if (heapElements.size() == 0){
+            return null;
+        }
+
+        Collections.swap(heapElements, 0, heapElements.size() - 1);
+        double[] minElement = heapElements.get(heapElements.size() - 1);
+        heapElements.remove(heapElements.size() - 1);
+        heapifyDown(0);
+
+        return minElement;
+    }
+    public void heapifyDown(int Index){
+        ArrayList<Integer> childrenIndices = getChildrenIndices(Index);
+
+        double minChild = -1;
+        int minChildIndex = -1;
+
+        if (childrenIndices.get(0) < heapElements.size()){
+            minChild = heapElements.get(childrenIndices.get(0))[1];
+            minChildIndex = childrenIndices.get(0);
+        }
+
+        for(int i=1; i < childrenIndices.size(); i++){
+            int childIndex = childrenIndices.get(i);
+
+            if(childIndex < heapElements.size()){
+                if(heapElements.get(childIndex)[1] < minChild){
+                    minChild = heapElements.get(childIndex)[1];
+                    minChildIndex = childIndex;
+                }
+
+                else if((heapElements.get(childIndex)[1] == minChild) && (heapElements.get(childIndex)[0] < heapElements.get(minChildIndex)[0])){
+                    minChild = heapElements.get(childIndex)[1];
+                    minChildIndex = childIndex;
+                }
+            }
+        }
+
+        if ((minChild != -1) && (heapElements.get(Index)[1] > minChild)){
+            Collections.swap(heapElements, Index, minChildIndex);
+            heapifyDown(minChildIndex);
+        }
+
+        else if((minChild != -1) && (heapElements.get(Index)[1] == minChild) && (heapElements.get(Index)[0] > heapElements.get(minChildIndex)[0])){
+            Collections.swap(heapElements, Index, minChildIndex);
+            heapifyDown(minChildIndex);
+        }
+    }
 }
