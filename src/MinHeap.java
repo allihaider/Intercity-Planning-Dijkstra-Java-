@@ -121,4 +121,9 @@ public class MinHeap {
             heapifyDown(minChildIndex);
         }
     }
+    public void updateHeap(int Index, double Distance){
+        heapElements.set(Index,new double[]{heapElements.get(Index)[0], Distance});
+        heapifyUp(Index);
+    }
+
 }
