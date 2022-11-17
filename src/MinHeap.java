@@ -26,6 +26,16 @@ public class MinHeap {
         }
     }
 
+    public ArrayList<Integer> getChildrenIndices(int Index){
+        ArrayList<Integer> childrenIndices = new ArrayList<Integer>();
+
+        for(int i=(Index * k) + 1; i <= (Index + 1) * k; i++){
+            childrenIndices.add(i);
+        }
+
+        return childrenIndices;
+    }
+
     public void heapifyUp(int Index){
         if(Index == 0){
             return;
