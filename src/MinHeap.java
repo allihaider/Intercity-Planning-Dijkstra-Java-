@@ -9,6 +9,10 @@ public class MinHeap {
         this.k = 2;
     }
 
+    public MinHeap(int k_value) {
+        this.k = k_value;
+    }
+
     public void add(int key, double value){
         heapElements.add(new double[]{key, value});
         heapifyUp(heapElements.size() - 1);
@@ -46,5 +50,15 @@ public class MinHeap {
             Collections.swap(heapElements, Index, getParentIndex(Index));
             heapifyUp(getParentIndex(Index));
         }
+    }
+
+    public ArrayList<Integer> getHeap(){
+        ArrayList<Integer> heapElementKeys = new ArrayList<Integer>();
+
+        for (int i=0; i<heapElements.size(); i++) {
+            heapElementKeys.add((int)heapElements.get(i)[0]);
+        }
+
+        return heapElementKeys;
     }
 }
