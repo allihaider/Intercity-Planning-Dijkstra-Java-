@@ -63,6 +63,56 @@ public class PathFinder {
             }
         }
     }
+
+    public double distance(int x1, int y1, int x2, int y2) {
+        return Math.sqrt((x1 - x2)* (x1 - x2) + (y1 - y2) * (y1 - y2));
+    }
+
+    public double distToDest(int sourceId, int destId, int kValue){
+        initializeGraphVertexValues(sourceId);
+        MinHeap myHeap = new MinHeap(kValue);
+
+        for (int vertexID : graph.vertices.keySet()){
+            myHeap.add(graph.vertices.get(vertexID).id, graph.vertices.get(vertexID).distance);
+        }
+
+        while(myHeap.heapElements.size() != 0){
+            double[] u = myHeap.extractMin();
+            int uId = (int)u[0];
+            double uDistance = u[1];
+
+            if ((uId == destId) && (uDistance != Double.POSITIVE_INFINITY)){
+                return uDistance;
+            }
+
+            graph.vertices.get(uId).explored = true;
+            HashMap<Integer, Integer> vertexID2HeapIndex = new HashMap<>();
+
+            for(int i=0; i < myHeap.heapElements.size(); i++){
+                double[] element = myHeap.heapElements.get(i);
+                vertexID2HeapIndex.put((int)element[0], i);
+            }
+
+            ArrayList<Integer> uNeighbourIds = graph.getVertexNeighbours(uId);
+
+            for(int j=0; j < uNeighbourIds.size(); j++){
+                int neighbourId = uNeighbourIds.get(j);
+
+                if(graph.vertices.get(neighbourId).explored == false){
+                    double euclideanDistance = distance(graph.vertices.get(uId).coords[0], graph.vertices.get(uId).coords[1], graph.vertices.get(neighbourId).coords[0], graph.vertices.get(neighbourId).coords[1]);
+
+                    if (graph.vertices.get(neighbourId).distance > graph.vertices.get(uId).distance + euclideanDistance){
+                        graph.vertices.get(neighbourId).distance = graph.vertices.get(uId).distance + euclideanDistance;
+
+                        int heapIndex = vertexID2HeapIndex.get(neighbourId);
+                        myHeap.updateHeap(heapIndex, graph.vertices.get(neighbourId).distance);
+                    }
+                }
+            }
+
+        }
+        return -1;
+    }
 }
 
 class Vertex{
