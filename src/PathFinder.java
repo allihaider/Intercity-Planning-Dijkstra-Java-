@@ -50,11 +50,24 @@ public class PathFinder {
 
         graph.edges = graph_edges;
     }
+
+    public void initializeGraphVertexValues(int sourceID){
+        for (int vertexID : graph.vertices.keySet()){
+            if (graph.vertices.get(vertexID).id == sourceID){
+                graph.vertices.get(vertexID).distance = 0;
+                graph.vertices.get(vertexID).numPaths = 1;
+            }
+            else{
+                graph.vertices.get(vertexID).distance = Double.POSITIVE_INFINITY;
+                graph.vertices.get(vertexID).numPaths = 0;
+            }
+        }
+    }
 }
 
 class Vertex{
     int id;
-    int distance;
+    double distance;
     int[] coords = new int[2];
     int parentId;
     int numPaths;
