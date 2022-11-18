@@ -18,3 +18,15 @@ class Vertex{
         this.explored = exploredValue;
     }
 }
+
+class Edges{
+    int size;
+    int[][] adjMatrix;
+    public Edges(int sizeValue) {
+        this.size = sizeValue;
+        this.adjMatrix = new int[sizeValue][sizeValue];
+    }
+    public void addEdge(int fromId, int toId){
+        this.adjMatrix[fromId][toId] = 1;
+    }
+}
