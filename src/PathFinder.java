@@ -113,6 +113,56 @@ public class PathFinder {
         }
         return -1;
     }
+
+    public int noOfShortestPaths(int sourceId, int destId, int kValue){
+        initializeGraphVertexValues(sourceId);
+        MinHeap myHeap = new MinHeap(kValue);
+
+        for (int vertexID : graph.vertices.keySet()){
+            myHeap.add(graph.vertices.get(vertexID).id, graph.vertices.get(vertexID).distance);
+        }
+
+        while(myHeap.heapElements.size() != 0){
+            double[] u = myHeap.extractMin();
+            int uId = (int)u[0];
+            double uDistance = u[1];
+
+            if (uId == destId){
+                return graph.vertices.get(uId).numPaths;
+            }
+
+            graph.vertices.get(uId).explored = true;
+            HashMap<Integer, Integer> vertexID2HeapIndex = new HashMap<>();
+
+            for(int i=0; i < myHeap.heapElements.size(); i++){
+                double[] element = myHeap.heapElements.get(i);
+                vertexID2HeapIndex.put((int)element[0], i);
+            }
+
+            ArrayList<Integer> uNeighbourIds = graph.getVertexNeighbours(uId);
+
+            for(int j=0; j < uNeighbourIds.size(); j++){
+                int neighbourId = uNeighbourIds.get(j);
+
+                if(graph.vertices.get(neighbourId).explored == false){
+                    double euclideanDistance = distance(graph.vertices.get(uId).coords[0], graph.vertices.get(uId).coords[1], graph.vertices.get(neighbourId).coords[0], graph.vertices.get(neighbourId).coords[1]);
+
+                    if (graph.vertices.get(neighbourId).distance > graph.vertices.get(uId).distance + euclideanDistance){
+                        graph.vertices.get(neighbourId).distance = graph.vertices.get(uId).distance + euclideanDistance;
+                        graph.vertices.get(neighbourId).numPaths = graph.vertices.get(uId).numPaths;
+
+                        int heapIndex = vertexID2HeapIndex.get(neighbourId);
+                        myHeap.updateHeap(heapIndex, graph.vertices.get(neighbourId).distance);
+                    }
+
+                    else if(graph.vertices.get(neighbourId).distance == graph.vertices.get(uId).distance + euclideanDistance){
+                        graph.vertices.get(neighbourId).numPaths = graph.vertices.get(neighbourId).numPaths + graph.vertices.get(uId).numPaths;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
 }
 
 class Vertex{
