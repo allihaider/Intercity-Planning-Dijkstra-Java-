@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class PathFinder {
 }
 
@@ -28,5 +31,25 @@ class Edges{
     }
     public void addEdge(int fromId, int toId){
         this.adjMatrix[fromId][toId] = 1;
+    }
+}
+
+class Graph{
+    HashMap<Integer, Vertex> vertices;
+    Edges edges;
+    public Graph(HashMap<Integer, Vertex> verticesValues, Edges edgesValues) {
+        this.vertices = verticesValues;
+        this.edges = edgesValues;
+    }
+
+    public ArrayList<Integer> getVertexNeighbours(int vertexId){
+        ArrayList<Integer> vertexNeighbours = new ArrayList<>();
+
+        for(int i=0; i < edges.size; i++){
+            if(edges.adjMatrix[vertexId][i] != 0){
+                vertexNeighbours.add(i);
+            }
+        }
+        return vertexNeighbours;
     }
 }
