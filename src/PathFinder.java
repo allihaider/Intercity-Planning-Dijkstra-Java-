@@ -1,7 +1,55 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PathFinder {
+
+    Graph graph = new Graph();
+
+    ArrayList<Integer> getNumsFromLineElement(String[] lineElement){
+        ArrayList<Integer> nums = new ArrayList<>();
+
+        for(int i=0; i < lineElement.length; i++){
+            String item = lineElement[i];
+
+            if(!item.equals("")){
+                nums.add(Integer.parseInt(item));
+            }
+        }
+        return nums;
+    }
+
+    public void readInput(String fileName) throws IOException {
+        ArrayList<String[]> lineElements = new ArrayList<>();
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        String line = null;
+
+        while ((line = br.readLine()) != null) {
+            lineElements.add(line.strip().split(" "));
+        }
+
+        ArrayList<Integer> nums = getNumsFromLineElement(lineElements.get(0));
+        int n = nums.get(0);
+        int m = nums.get(1);
+
+        for(int i=1; i < n+1; i++){
+            nums = getNumsFromLineElement(lineElements.get(i));
+            Vertex v = new Vertex(nums.get(0), new int[]{nums.get(1), nums.get(2)});
+            graph.vertices.put(nums.get(0), v);
+        }
+
+        Edges graph_edges = new Edges(n);
+
+        for(int j=n+2; j < n+2+m; j++){
+            nums = getNumsFromLineElement(lineElements.get(j));
+            graph_edges.addEdge(nums.get(0), nums.get(1));
+            graph_edges.addEdge(nums.get(1), nums.get(0));
+        }
+
+        graph.edges = graph_edges;
+    }
 }
 
 class Vertex{
@@ -12,13 +60,9 @@ class Vertex{
     int numPaths;
     boolean explored;
 
-    public Vertex(int idValue, int distanceValue, int[] coordsValue, int parentIdValue, int numPathsValue, boolean exploredValue) {
+    public Vertex(int idValue, int[] coordsValue) {
         this.id = idValue;
-        this.distance = distanceValue;
         this.coords = coordsValue;
-        this.parentId = parentIdValue;
-        this.numPaths = numPathsValue;
-        this.explored = exploredValue;
     }
 }
 
@@ -35,12 +79,12 @@ class Edges{
 }
 
 class Graph{
-    HashMap<Integer, Vertex> vertices;
+    HashMap<Integer, Vertex> vertices = new HashMap<>();
     Edges edges;
-    public Graph(HashMap<Integer, Vertex> verticesValues, Edges edgesValues) {
+    /*public Graph(HashMap<Integer, Vertex> verticesValues, Edges edgesValues) {
         this.vertices = verticesValues;
         this.edges = edgesValues;
-    }
+    }*/
 
     public ArrayList<Integer> getVertexNeighbours(int vertexId){
         ArrayList<Integer> vertexNeighbours = new ArrayList<>();
