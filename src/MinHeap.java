@@ -9,8 +9,8 @@ public class MinHeap {
         this.k = 2;
     }
 
-    public MinHeap(int k_value) {
-        this.k = k_value;
+    public MinHeap(int kValue) {
+        this.k = kValue;
     }
 
     public void add(int key, double value){
