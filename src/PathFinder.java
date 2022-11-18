@@ -163,6 +163,65 @@ public class PathFinder {
         }
         return 0;
     }
+
+    public ArrayList<Integer> fromSrcToDest(int sourceId, int destId, int kValue){
+        initializeGraphVertexValues(sourceId);
+        MinHeap myHeap = new MinHeap(kValue);
+
+        for (int vertexID : graph.vertices.keySet()){
+            myHeap.add(graph.vertices.get(vertexID).id, graph.vertices.get(vertexID).distance);
+        }
+
+        ArrayList<Integer> pathIds = new ArrayList<>();
+
+        while(myHeap.heapElements.size() != 0){
+            double[] u = myHeap.extractMin();
+            int uId = (int)u[0];
+
+            if (uId == destId){
+                Vertex currentVertex = graph.vertices.get(uId);
+                pathIds.add(0, uId);
+
+                while (currentVertex.parentId != sourceId){
+                    pathIds.add(0, currentVertex.parentId);
+                    currentVertex = graph.vertices.get(currentVertex.parentId);
+                }
+
+                pathIds.add(0, sourceId);
+
+                return pathIds;
+            }
+
+            graph.vertices.get(uId).explored = true;
+            HashMap<Integer, Integer> vertexID2HeapIndex = new HashMap<>();
+
+            for(int i=0; i < myHeap.heapElements.size(); i++){
+                double[] element = myHeap.heapElements.get(i);
+                vertexID2HeapIndex.put((int)element[0], i);
+            }
+
+            ArrayList<Integer> uNeighbourIds = graph.getVertexNeighbours(uId);
+
+            for(int j=0; j < uNeighbourIds.size(); j++){
+                int neighbourId = uNeighbourIds.get(j);
+
+                if(graph.vertices.get(neighbourId).explored == false){
+                    double euclideanDistance = distance(graph.vertices.get(uId).coords[0], graph.vertices.get(uId).coords[1], graph.vertices.get(neighbourId).coords[0], graph.vertices.get(neighbourId).coords[1]);
+                    double euclideanDistanceVT = distance(graph.vertices.get(neighbourId).coords[0], graph.vertices.get(neighbourId).coords[1], graph.vertices.get(destId).coords[0], graph.vertices.get(destId).coords[1]);
+                    double euclideanDistanceUT = distance(graph.vertices.get(uId).coords[0], graph.vertices.get(uId).coords[1], graph.vertices.get(destId).coords[0], graph.vertices.get(destId).coords[1]);
+
+                    if (graph.vertices.get(neighbourId).distance > graph.vertices.get(uId).distance + euclideanDistance + euclideanDistanceVT - euclideanDistanceUT){
+                        graph.vertices.get(neighbourId).distance = graph.vertices.get(uId).distance + euclideanDistance + euclideanDistanceVT - euclideanDistanceUT;
+                        graph.vertices.get(neighbourId).parentId = uId;
+
+                        int heapIndex = vertexID2HeapIndex.get(neighbourId);
+                        myHeap.updateHeap(heapIndex, graph.vertices.get(neighbourId).distance);
+                    }
+                }
+            }
+        }
+        return new ArrayList<Integer>();
+    }
 }
 
 class Vertex{
