@@ -188,6 +188,10 @@ public class PathFinder {
                 Vertex currentVertex = graph.vertices.get(uId);
                 pathIds.add(0, uId);
 
+                if (currentVertex.parentId == -1){
+                    return null;
+                }
+
                 while (currentVertex.parentId != sourceId){
                     pathIds.add(0, currentVertex.parentId);
                     currentVertex = graph.vertices.get(currentVertex.parentId);
@@ -226,7 +230,7 @@ public class PathFinder {
                 }
             }
         }
-        return new ArrayList<Integer>();
+        return null;
     }
 }
 
@@ -234,7 +238,7 @@ class Vertex{
     int id;
     double distance;
     int[] coords = new int[2];
-    int parentId;
+    int parentId = -1;
     int numPaths;
     boolean explored;
 
