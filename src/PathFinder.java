@@ -265,10 +265,6 @@ class Edges{
 class Graph{
     HashMap<Integer, Vertex> vertices = new HashMap<>();
     Edges edges;
-    /*public Graph(HashMap<Integer, Vertex> verticesValues, Edges edgesValues) {
-        this.vertices = verticesValues;
-        this.edges = edgesValues;
-    }*/
 
     public ArrayList<Integer> getVertexNeighbours(int vertexId){
         ArrayList<Integer> vertexNeighbours = new ArrayList<>();
