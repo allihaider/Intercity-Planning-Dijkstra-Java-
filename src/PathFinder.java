@@ -10,6 +10,9 @@ public class PathFinder {
     Graph graph = new Graph();
     String filePath;
 
+    public PathFinder(){
+
+    }
     ArrayList<Integer> getNumsFromLineElement(String[] lineElement){
         ArrayList<Integer> nums = new ArrayList<>();
 
