@@ -74,7 +74,7 @@ public class PathFinder {
         return Math.sqrt((x1 - x2)* (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
 
-    public double distToDest (int sourceId, int destId, int kValue) throws IOException{
+    public double distToDest(int sourceId, int destId, int kValue) throws IOException{
         readInput(filePath);
         initializeGraphVertexValues(sourceId);
         MinHeap myHeap = new MinHeap(kValue);
@@ -133,7 +133,6 @@ public class PathFinder {
         while(myHeap.heapElements.size() != 0){
             double[] u = myHeap.extractMin();
             int uId = (int)u[0];
-            double uDistance = u[1];
 
             if (uId == destId){
                 return graph.vertices.get(uId).numPaths;
